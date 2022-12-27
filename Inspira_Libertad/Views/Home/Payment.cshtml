@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Payment";
+}
+
+<div class="p-4">
+    <h4 class="text-success mt-2">Payment Inspira Libertad</h4>
+    <hr />
+    <div class="d-flex align-items-center">
+        <div class="mt-4 p-4 col col-lg-8">
+            <div id="divCarrito"></div>
+            <div class="d-flex justify-content-end"><a class="btn btn-success" asp-area="" asp-controller="Home" asp-action="AreaPersonal">Cancelar</a></div>
+        </div>
+        <div class="mt-4 p-4 col col-lg-4">
+            <div id="paypal-button-container"></div>
+            <div id="divMensaje"></div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://www.paypal.com/sdk/js?client-id=AUHCD1-Gx7eqXnUi-eDHuLcvQuuSWGcztlOoxla4_LCoyIzgt4y2L-krOVgzrr8MyZhmSApHCVGhaQ6j"></script>
+    <script>
+        let cursos = JSON.parse(localStorage.getItem("cursos"));
+        let importeTotal = '@ViewBag.ImporteTotal';
+
+        $(document).ready(function () {
+            loadCarritoPayment(cursos);
+        });
+
+        async function PaymentProcess(){
+            let url = '@Url.Action("PaymentProcess")';
+            await fetch(url, {
+                method: "GET"
+            })
+        }
+
+        if (importeTotal > 0) {
+            paypal.Buttons({
+                createOrder: function (data, actions) {
+                    // This function sets up the details of the transaction, including the amount and line item details.
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: importeTotal
+                            }
+                        }]
+                    });
+                },
+                onApprove: function (data, actions) {
+                    // This function captures the funds from the transaction.
+                    return actions.order.capture().then(function (details) {
+                        // This function shows a transaction success message to your buyer.
+                        //alert('Transaction completed by ' + details.payer.name.given_name);
+
+                        PaymentProcess().then(() => {
+                            vaciarCarrito();
+                            if (importeTotal < totalCarrito) {
+                                $("#divMensaje").html("<div class = 'p-2 bg-success text-white'>La compra se ha procesado correctamente. Alguno de los cursos que tenías en tu carrito los habías comprado con anterioridad y por tanto no se ha procesado su compra. Tienes tus cursos disponibles en tu Área Personal..</div>")
+                            }
+                            else{
+                                location = '/Home/AreaPersonal';
+                            }
+                        });
+                    });
+                }
+            }).render('#paypal-button-container');
+            
+        }
+        else {
+            $("#paypal-button-container").html("<div class = 'p-2 bg-success text-white'>No podemos procesar la compra. Ya has comprado anteriormente estos cursos. Los tienes disponibles en tu Área Personal..</div>")
+        }
+
+    </script>
+}

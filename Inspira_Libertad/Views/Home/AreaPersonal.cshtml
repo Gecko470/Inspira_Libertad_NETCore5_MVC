@@ -1,0 +1,30 @@
+﻿@model List<Curso>
+@{
+    ViewData["Title"] = "Área Personal";
+}
+
+<div class="p-4">
+    <h4 class="text-success mt-2">Área Personal</h4>
+    <hr />
+    <div class="p-4 mt-4">
+        @if (Model.Count == 0)
+        {
+            <p>Aquí encontraras tus cursos. Aún no has comprado ningún curso.</p>
+        }
+        else
+        {
+            <h5 class="text-success mt-2">Tus cursos</h5>
+            <div class="d-flex">
+                @foreach (var item in Model)
+                {
+                    <div class="card mr-4" style="width: 400px">
+                        <div class="card-header">
+                            @item.Nombre
+                        </div>
+                        <video src="@item.Url" controls/>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

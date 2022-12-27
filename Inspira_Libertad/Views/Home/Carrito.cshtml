@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Carrito";
+}
+
+<div class="p-4">
+    <h4 class="text-success mt-2">Carrito Inspira Libertad</h4>
+    <hr />
+    <div id="divCarrito"></div>
+</div>
+
+@section Scripts{
+    <script>
+        let cursos = JSON.parse(localStorage.getItem("cursos"));
+        $(function () {
+            loadCarrito(cursos);
+            $("#btnContinuar").click(function () {
+                let url = '@Url.Action("CreateOrder")';
+                fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(cursos),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(resp => {
+                    if (resp.ok) {
+                        location = '/Home/Payment';
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
