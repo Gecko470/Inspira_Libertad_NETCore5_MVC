@@ -1,3 +1,4 @@
+using Inspira_Libertad.Azure;
 using Inspira_Libertad.Data;
 using Inspira_Libertad.Models;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,10 @@ namespace Inspira_Libertad
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
             
             services.AddDatabaseDeveloperPageExceptionFilter();
 

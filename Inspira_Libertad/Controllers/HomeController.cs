@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SendGrid.Helpers.Mail;
+using SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +16,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Inspira_Libertad.Controllers
 {
@@ -24,20 +27,23 @@ namespace Inspira_Libertad.Controllers
         private readonly IHttpContextAccessor httpContext;
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IConfiguration configuration;
 
-
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext AppDbContext, IHttpContextAccessor httpContext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext AppDbContext, IHttpContextAccessor httpContext, 
+            UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
         {
             this.logger = logger;
             appDbContext = AppDbContext;
             this.httpContext = httpContext;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.configuration = configuration;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Frase> listaFrases = await appDbContext.Frases.ToListAsync();
+            return View(listaFrases);
         }
 
         public IActionResult QueEs()
@@ -50,9 +56,11 @@ namespace Inspira_Libertad.Controllers
             return View();
         }
 
-        public IActionResult Cursos()
+        [HttpGet]
+        public async Task<IActionResult> Cursos()
         {
-            return View();
+            List<Articulo> listaArticulos = await appDbContext.Articulos.Where(p => p.Habilitado == 1).ToListAsync();
+            return View(listaArticulos);
         }
 
         public IActionResult AtPers()
@@ -71,8 +79,9 @@ namespace Inspira_Libertad.Controllers
         }
 
         [HttpGet]
-        public IActionResult Contacto()
+        public IActionResult Contacto(Boolean resp = false)
         {
+            ViewBag.resp = resp;
             return View();
         }
 
@@ -81,7 +90,17 @@ namespace Inspira_Libertad.Controllers
         {
             await appDbContext.Mensajes.AddAsync(mensaje);
             await appDbContext.SaveChangesAsync();
-            return RedirectToAction("Contacto");
+
+            var apiKey = configuration.GetValue<string>("InspiraLibertad_API_KEY");
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("juangomezsousa@outlook.com", "Inspira Libertad");
+            var subject = "Mensaje cliente Inspira Libertad";
+            var to = new EmailAddress("codeworks9@gmail.com", "María Gómez");
+            var plainTextContent = mensaje.Texto;
+            var htmlContent = @$"<strong>Email: {mensaje.Email}</strong><br/><strong>Mensaje: {mensaje.Texto}</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            Response response = await client.SendEmailAsync(msg);
+            return RedirectToAction("Contacto", new {resp = response.IsSuccessStatusCode});
         }
 
         [Authorize]

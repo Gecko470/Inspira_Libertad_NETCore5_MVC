@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Contacto";
+    bool resp = ViewBag.resp;
 }
 
 <div id="divContainer" class="p-4">
@@ -9,7 +10,16 @@
     <hr />
     <div class="mt-4 p-4">
         <div class="col-4">
-            <form asp-action="Contacto">
+            @if (resp == true)
+            {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Mensaje enviado!</strong> Te contestaremos lo antes posible..
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            }
+            <form asp-controller="Home" asp-action="Contacto">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Nombre" class="control-label"></label>
@@ -23,7 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Texto" class="control-label">Mensaje</label>
-                    <input asp-for="Texto" class="form-control" />
+                    <textarea asp-for="Texto" class="form-control"></textarea>
                     <span asp-validation-for="Texto" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex justify-content-end">
@@ -33,6 +43,10 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}
 
 
 

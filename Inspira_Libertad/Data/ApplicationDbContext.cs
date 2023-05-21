@@ -18,6 +18,8 @@ namespace Inspira_Libertad.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Curso> Cursos { get; set; }
+        public DbSet<Frase> Frases { get; set; }
+        public DbSet<Articulo> Articulos { get; set; }
 
     }
 }

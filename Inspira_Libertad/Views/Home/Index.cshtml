@@ -1,5 +1,33 @@
-﻿@{
+﻿@model List<Frase>
+@{
     ViewData["Title"] = "Home";
 }
 
-<div id="divContainer"></div>
+<div id="divContainer">
+    <div style="height: 200px;"></div>
+    @foreach (var item in Model)
+    {
+        <div id=@item.Id class="font-italic col-10 mx-auto" style="display: none;">
+            <cite>"@item.Texto"</cite>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function(){
+            let num = 0;
+            do{
+                num = Math.round(Math.random() * 10) + 1;
+            }
+            while (num > @Model.Count);
+
+            let identificador = "#" + num.toString();
+            $(identificador).fadeIn(5000, function(){
+                $(identificador).delay(7000).fadeOut(5000, function(){
+
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,72 @@
+﻿@model Inspira_Libertad.DTOs.ArticuloDTO
+
+@{
+    ViewData["Title"] = "Articulos-Create";
+    Layout = "_Layout-Adm";
+}
+
+<div class="p-4">
+    <div class="d-flex justify-content-between">
+        <h4 class="text-success mt-2">Artículos - Create</h4>
+        <a class="btn btn-light text-success" asp-controller="Adm" asp-action="Articulos">Volver</a>
+    </div>
+
+    <hr />
+    <div class="p-4 mt-4 col-6 mx-auto">
+        <form id="formCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Precio" class="control-label"></label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="File" class="control-label"></label>
+                <input type="file" asp-for="File" id="file" class="form-control" />
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Texto" class="control-label"></label>
+                <textarea asp-for="Texto" class="form-control" rows="8"></textarea>
+                <span asp-validation-for="Texto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            let url = '@Url.Action("ArticuloCreate")';
+
+            $("#formCreate").submit(function (event) {
+                var f = $(this);
+                var form_data = new FormData(document.getElementById("formCreate"));
+                var file_data = $("#file").prop("files")[0];
+                form_data.append("File", file_data);
+                event.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    enctype:"multipart/form-data",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                }).done(function () {
+                    location = '/Adm/Articulos';
+                });
+            });
+        });
+    </script>
+    
+}

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Inspira_Libertad.Models.Curso>
+
+@{
+    ViewData["Title"] = "Videos";
+    Layout = "_Layout-Adm";
+}
+
+<div class="p-4">
+    <h4 class="text-success mt-2">Admin - Vídeos</h4>
+    <hr />
+    <div>
+        <a class="btn btn-success" asp-controller="Adm" asp-action="VideoCreate">Nuevo</a>
+    </div>
+    <div class="p-4 mt-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Precio)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Url)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Precio)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Url)
+                        </td>
+                        <td>
+                            <a class="text-success" asp-action="VideoEdit" asp-route-id="@item.CursoId">Edit</a> |
+                        <a onclick="obtenerIdVideo(@item.CursoId)" href="#" data-toggle="modal" data-target="#alertaModal"><i class="bi bi-trash text-danger"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let id = 0;
+        function obtenerIdVideo(data) {
+            id = data;
+            console.log(id);
+        }
+        $(document).ready(function () {
+            $("#btnAlertaAceptar").click(function () {
+                let url = '@Url.Action("VideoDelete")';
+                event.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { id: id }
+                }).done(function () {
+                    location = '/Adm/Videos';
+                });
+            });
+        });
+    </script>
+}

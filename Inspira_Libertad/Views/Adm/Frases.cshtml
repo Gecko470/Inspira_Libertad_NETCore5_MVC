@@ -1,0 +1,68 @@
+﻿@model List<Frase>
+@{
+    ViewData["Title"] = "Frases";
+    Layout = "_Layout-Adm";
+}
+<div class="p-4">
+    <h4 class="text-success mt-2">Admin - Frases</h4>
+    <hr />
+    <div>
+        <a class="btn btn-success" asp-controller="Adm" asp-action="FraseCreate">Nueva</a>
+    </div>
+    <div class="p-4 mt-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Frase
+                    </th>
+                    <th colspan="2">
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Texto
+                        </td>
+                        <td><a asp-controller="Adm" asp-action="FraseEdit" asp-route-id="@item.Id"><i class="bi bi-pencil-square text-primary"></i></a></td>
+                        <td><a onclick="obtenerId(@item.Id)" href="#" data-toggle="modal" data-target="#alertaModal"><i class="bi bi-trash text-danger"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let id = 0;
+            function obtenerId(data){
+                id = data;
+                console.log(id);
+            }
+        $(document).ready(function () {
+            $("#btnAlertaAceptar").click(function () {
+                let url = '@Url.Action("FraseDelete")';
+                event.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { id: id }
+                }).done(function () {
+                    location = '/Adm/Frases';
+                });
+            });
+        });
+    </script>
+}

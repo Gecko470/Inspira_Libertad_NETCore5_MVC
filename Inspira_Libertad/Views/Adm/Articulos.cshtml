@@ -1,0 +1,101 @@
+﻿@model List<Articulo>
+@{
+    ViewData["Title"] = "Artículos";
+    Layout = "_Layout-Adm";
+}
+
+
+<div class="p-4">
+    <h4 class="text-success mt-2">Admin - Articulos</h4>
+    <hr />
+    <div>
+        <a class="btn btn-success" asp-controller="Adm" asp-action="ArticuloCreate">Nuevo</a>
+    </div>
+    <div class="p-4 mt-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        ArticuloId
+                    </th>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Precio
+                    </th>
+                    <th>
+                        Url
+                    </th>
+                    <th>
+                        Texto
+                    </th>
+                    <th>
+                        Habilitado
+                    </th>
+                    <th colspan="2">
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.ArticuloId
+                        </td>
+                        <td>
+                            @item.Nombre
+                        </td>
+                        <td>
+                            @item.Precio
+                        </td>
+                        <td>
+                            @item.Url
+                        </td>
+                        <td>
+                            @item.Texto
+                        </td>
+
+                        @if (@item.Habilitado == 0)
+                        {
+                            <td>No</td>
+                        }
+                        else
+                        {
+                            <td>Si</td>
+                        }
+
+                        <td><a asp-controller="Adm" asp-action="ArticuloEdit" asp-route-id="@item.ArticuloId"><i class="bi bi-pencil-square text-primary"></i></a></td>
+                        <td><a onclick="obtenerId(@item.ArticuloId)" href="#" data-toggle="modal" data-target="#alertaModal"><i class="bi bi-trash text-danger"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let id = 0;
+        function obtenerId(data) {
+            id = data;
+            console.log(id);
+        }
+        $(document).ready(function () {
+            $("#btnAlertaAceptar").click(function () {
+                let url = '@Url.Action("ArticuloDelete")';
+                event.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { id: id }
+                }).done(function () {
+                    location = '/Adm/Articulos';
+                });
+            });
+        });
+    </script>
+}

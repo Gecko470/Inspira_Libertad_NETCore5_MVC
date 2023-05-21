@@ -1,0 +1,49 @@
+﻿@model Frase
+@{
+    ViewData["Title"] = "Frases-Edit";
+    Layout = "_Layout-Adm";
+}
+<div class="p-4">
+    <div class="d-flex justify-content-between">
+        <h4 class="text-success mt-2">Frases - Edit</h4>
+        <a class="btn btn-light text-success" asp-controller="Adm" asp-action="Frases">Volver</a>
+    </div>
+    <hr />
+    <div class="p-4 mt-4 col-6 mx-auto">
+        <form id="formEdit">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label asp-for="Texto" class="col-form-label">Texto</label>
+                <input type="hidden" asp-for="Id"/>
+                <input type="text" class="form-control" asp-for="Texto"/>
+                <span class="mt-2 text-danger" asp-validation-for="Texto"></span>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" id="btnCrear" class="btn btn-success">Actualizar</button>
+            </div>
+        </form>
+        <div id="divAlerta"></div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#formEdit").submit(function (event) {
+                let url = '@Url.Action("FraseUpdate")';
+                let frase = $("#formEdit").serialize();
+                event.preventDefault();
+  
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: frase
+                }).done(function () {
+                    location = '/Adm/Frases';
+                });
+            });
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

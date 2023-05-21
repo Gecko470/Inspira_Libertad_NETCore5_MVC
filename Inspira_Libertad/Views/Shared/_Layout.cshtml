@@ -12,14 +12,14 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 mt-5">
+        <nav class="navbar navbar-expand-xl navbar-toggleable-xl navbar-light bg-white border-bottom box-shadow mb-3 mt-5">
             <div class="container-fluid">
                 <h1 class="h3 mr-5"><a class="text-success text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">Inspira Libertad</a></h1>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-xl-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark mr-2" asp-area="" asp-controller="Home" asp-action="QueEs">Qué Es?</a>
@@ -65,7 +65,7 @@
     </header>
 
 
-    <main role="main" class="container-fluid">
+    <main role="main" class="container-fluid" style="position: relative; min-height: 85vh;">
         @RenderBody()
         <footer class="footer text-muted">
             &copy; 2022 - Inspira Libertad - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-success">Privacidad</a>

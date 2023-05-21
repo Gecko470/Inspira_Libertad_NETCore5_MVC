@@ -197,6 +197,4 @@ function loadCarritoPayment(cursos) {
 
 }
 
-$(function () {
-    cargarCarrito();
-});
+window.addEventListener("load", cargarCarrito());

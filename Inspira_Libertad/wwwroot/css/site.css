@@ -27,12 +27,17 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-    font-size: 14px;
+    font-size: 12px;
+}
+
+body{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
 
 @media (min-width: 768px) {
     html {
-        font-size: 13px;
+        font-size: 14px;
     }
 }
 
@@ -55,26 +60,31 @@ button.accept-policy {
 
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
+/*html {
     position: relative;
     min-height: 100%;
-}
+}*/
 
-body {
-    /* Margin bottom by footer height */
-    margin-bottom: 60px;
-}
+/*body {*/
+     /*Margin bottom by footer height */
+    /*margin-bottom: 40px;
+}*/
 
 .footer {
     position: absolute;
     bottom: 0;
-    line-height: 60px; /* Vertically center the text there */
+    /*line-height: 40px;*/ /* Vertically center the text there */
     width: auto;
+    margin-top: 15px;
 }
 
 #divContainer {
-    background: url("../img/fondo.jpg") no-repeat;
-    background-size: 80vw;
+    background: url("../img/fondo.png") no-repeat;
+    background-size: 70vw;
     background-position: bottom right;
-    min-height: 74vh;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    min-height: 70vh;
+    width: 100%;
 }
